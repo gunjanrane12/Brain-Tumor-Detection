@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: neuroscan-brain-tumor
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --workers 1 --timeout 120 --bind 0.0.0.0:$PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: MODEL_PATH
+        value: brain_tumor_cnn_model.h5
+      # Render sets RENDER_EXTERNAL_URL automatically — used by self-ping

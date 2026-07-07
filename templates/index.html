@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NeuroScan AI · Brain Tumor Detection</title>
+  <meta name="description" content="AI-powered MRI brain scan analysis for early tumor detection using deep learning CNNs. Upload your scan and get instant results." />
+  <meta name="keywords" content="brain tumor detection, MRI analysis, AI radiology, neural network, deep learning, glioma, meningioma, pituitary" />
+  <meta property="og:title" content="NeuroScan AI · Brain Tumor Detection" />
+  <meta property="og:description" content="AI-powered MRI brain scan analysis for early tumor detection." />
+  <meta property="og:type" content="website" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+
+  <!-- ── Animated Background ── -->
+  <div class="bg-orbs" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <!-- ── Header ── -->
+  <header class="header">
+    <div class="container header-inner">
+      <div class="logo">
+        <div class="logo-icon" aria-hidden="true">
+          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="20" cy="20" r="19" stroke="url(#grad1)" stroke-width="2"/>
+            <path d="M14 20 C14 16, 17 13, 20 13 C23 13, 26 16, 26 20 C26 24, 23 27, 20 27 C17 27, 14 24, 14 20Z" stroke="url(#grad1)" stroke-width="1.5" fill="none"/>
+            <circle cx="20" cy="20" r="3" fill="url(#grad1)"/>
+            <line x1="20" y1="7" x2="20" y2="11" stroke="url(#grad1)" stroke-width="1.5"/>
+            <line x1="20" y1="29" x2="20" y2="33" stroke="url(#grad1)" stroke-width="1.5"/>
+            <line x1="7" y1="20" x2="11" y2="20" stroke="url(#grad1)" stroke-width="1.5"/>
+            <line x1="29" y1="20" x2="33" y2="20" stroke="url(#grad1)" stroke-width="1.5"/>
+            <defs>
+              <linearGradient id="grad1" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#6366f1"/>
+                <stop offset="100%" stop-color="#a855f7"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <div class="logo-text">
+          <span class="logo-name">NeuroScan</span>
+          <span class="logo-badge">AI</span>
+        </div>
+      </div>
+      <nav class="header-nav" aria-label="Main navigation">
+        <a href="#upload-section" id="nav-analyze">Analyze</a>
+        <a href="#about-section" id="nav-about">About</a>
+        <a href="#classes-section" id="nav-classes">Tumor Types</a>
+      </nav>
+      <div class="status-pill" id="status-pill" role="status" aria-live="polite">
+        <span class="status-dot"></span>
+        <span class="status-text">Model Ready</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Hero ── -->
+  <section class="hero" aria-labelledby="hero-heading">
+    <div class="container">
+      <div class="hero-badge animate-fade-up" aria-label="Research grade AI">
+        <span class="badge-dot" aria-hidden="true"></span>
+        Research-Grade Deep Learning
+      </div>
+      <h1 class="hero-title animate-fade-up" id="hero-heading">
+        Detect Brain Tumors<br />
+        <span class="gradient-text">with Precision AI</span>
+      </h1>
+      <p class="hero-subtitle animate-fade-up">
+        Upload an MRI scan and our convolutional neural network instantly classifies it across 
+        four categories — <strong>Glioma</strong>, <strong>Meningioma</strong>, 
+        <strong>Pituitary</strong>, or <strong>No Tumor</strong> — with confidence scores.
+      </p>
+      <div class="hero-stats animate-fade-up" role="list" aria-label="Model statistics">
+        <div class="stat-item" role="listitem">
+          <span class="stat-value">4</span>
+          <span class="stat-label">Tumor Classes</span>
+        </div>
+        <div class="stat-divider" aria-hidden="true"></div>
+        <div class="stat-item" role="listitem">
+          <span class="stat-value">CNN</span>
+          <span class="stat-label">Architecture</span>
+        </div>
+        <div class="stat-divider" aria-hidden="true"></div>
+        <div class="stat-item" role="listitem">
+          <span class="stat-value">128px</span>
+          <span class="stat-label">Input Resolution</span>
+        </div>
+        <div class="stat-divider" aria-hidden="true"></div>
+        <div class="stat-item" role="listitem">
+          <span class="stat-value">&lt;1s</span>
+          <span class="stat-label">Inference Time</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Try a Sample ── -->
+  <section class="sample-section" id="sample-section" aria-labelledby="sample-heading">
+    <div class="container">
+      <div class="sample-bar">
+        <div class="sample-bar-left">
+          <span class="sample-label" id="sample-heading">🎲 Try a Sample</span>
+          <span class="sample-hint">Pick any class to load a random MRI from your dataset folder</span>
+        </div>
+        <div class="sample-pills" id="sample-pills" role="group" aria-label="Filter by tumor class">
+          <button class="sample-pill active" data-label="" id="pill-any" aria-pressed="true">Any Class</button>
+          <button class="sample-pill" data-label="glioma" id="pill-glioma" aria-pressed="false">🔴 Glioma</button>
+          <button class="sample-pill" data-label="meningioma" id="pill-meningioma" aria-pressed="false">🟠 Meningioma</button>
+          <button class="sample-pill" data-label="pituitary" id="pill-pituitary" aria-pressed="false">🟣 Pituitary</button>
+          <button class="sample-pill" data-label="no_tumor" id="pill-notumor" aria-pressed="false">🟢 No Tumor</button>
+        </div>
+        <button class="sample-go-btn" id="sample-go-btn" aria-label="Load a random sample image">
+          <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/></svg>
+          Load Sample
+        </button>
+      </div>
+      <!-- Dataset not found notice (hidden by default) -->
+      <div class="sample-notice" id="sample-notice" hidden role="alert">
+        <span>📁</span>
+        <span id="sample-notice-text">No dataset folder found. Create <code>dataset/glioma/</code>, <code>dataset/meningioma/</code>, etc. and paste images inside.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Upload Section ── -->
+  <section class="upload-section" id="upload-section" aria-labelledby="upload-heading">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title" id="upload-heading">Analyze Your MRI Scan</h2>
+        <p class="section-subtitle">Supported formats: JPG, PNG, BMP, TIFF, WebP · Max size: 16 MB</p>
+      </div>
+
+      <div class="upload-grid">
+        <!-- Drop Zone -->
+        <div class="upload-card">
+          <form id="upload-form" enctype="multipart/form-data" aria-label="MRI image upload form">
+            <div class="drop-zone" id="drop-zone" 
+                 role="button" tabindex="0" 
+                 aria-label="Drop your MRI image here or click to browse"
+                 aria-describedby="drop-hint">
+              <input type="file" id="file-input" name="file" 
+                     accept="image/*" class="file-input" 
+                     aria-label="Select MRI image file" />
+              <div class="drop-content" id="drop-content">
+                <div class="drop-icon" aria-hidden="true">
+                  <svg viewBox="0 0 64 64" fill="none">
+                    <rect x="8" y="16" width="48" height="36" rx="4" stroke="currentColor" stroke-width="2"/>
+                    <path d="M8 28 C16 24, 24 36, 32 32 C40 28, 48 20, 56 24" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <circle cx="20" cy="24" r="3" fill="currentColor"/>
+                    <path d="M32 8 L32 20 M28 12 L32 8 L36 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <h3 class="drop-title">Drop MRI Image Here</h3>
+                <p class="drop-subtitle" id="drop-hint">or <button type="button" id="browse-btn" class="browse-link">browse files</button></p>
+              </div>
+              <!-- Preview -->
+              <div class="preview-content" id="preview-content" hidden>
+                <img id="preview-img" src="" alt="Uploaded MRI scan preview" class="preview-img" />
+                <div class="preview-info">
+                  <span id="preview-name" class="preview-name"></span>
+                  <button type="button" id="remove-btn" class="remove-btn" aria-label="Remove selected image">
+                    <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <button type="submit" id="analyze-btn" class="analyze-btn" disabled aria-label="Analyze uploaded MRI scan">
+              <span class="btn-text">Analyze Scan</span>
+              <span class="btn-spinner" hidden aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" stroke-dasharray="31.4" stroke-dashoffset="10"/>
+                </svg>
+              </span>
+              <svg class="btn-arrow" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
+              </svg>
+            </button>
+          </form>
+        </div>
+
+        <!-- Result Panel -->
+        <div class="result-panel" id="result-panel" aria-live="polite" aria-atomic="true">
+          <!-- Empty State -->
+          <div class="result-empty" id="result-empty">
+            <div class="empty-icon" aria-hidden="true">
+              <svg viewBox="0 0 80 80" fill="none">
+                <circle cx="40" cy="40" r="36" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 4"/>
+                <path d="M28 40 C28 33, 33 28, 40 28 C47 28, 52 33, 52 40 C52 47, 47 52, 40 52 C33 52, 28 47, 28 40Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                <circle cx="40" cy="40" r="4" fill="currentColor" opacity="0.4"/>
+              </svg>
+            </div>
+            <h3>Awaiting Scan</h3>
+            <p>Upload an MRI image to see AI analysis results here</p>
+          </div>
+
+          <!-- Loading State -->
+          <div class="result-loading" id="result-loading" hidden>
+            <div class="scan-animation" aria-hidden="true">
+              <div class="scan-circle"></div>
+              <div class="scan-line"></div>
+              <div class="scan-pulse"></div>
+            </div>
+            <h3>Analyzing Scan…</h3>
+            <p>Running neural network inference</p>
+          </div>
+
+          <!-- Result Content -->
+          <div class="result-content" id="result-content" hidden>
+            <!-- True label tag (shown only for dataset samples) -->
+            <div class="true-label-tag" id="true-label-tag" hidden aria-label="True label from dataset">
+              <span class="tl-icon" aria-hidden="true">🏷️</span>
+              <span>True label: </span>
+              <strong id="true-label-text"></strong>
+            </div>
+            <div class="result-header">
+              <div class="result-icon" id="result-icon" aria-hidden="true"></div>
+              <div>
+                <div class="result-label" id="result-label">Detection Result</div>
+                <div class="result-name" id="result-name"></div>
+              </div>
+            </div>
+
+            <div class="confidence-section">
+              <div class="confidence-header">
+                <span>Primary Confidence</span>
+                <span class="confidence-value" id="confidence-value"></span>
+              </div>
+              <div class="confidence-bar-track" role="progressbar" 
+                   aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"
+                   aria-label="Primary confidence level">
+                <div class="confidence-bar-fill" id="confidence-bar"></div>
+              </div>
+            </div>
+
+            <div class="all-scores" id="all-scores" aria-label="All class probability scores"></div>
+
+            <div class="result-info" id="result-info">
+              <div class="info-item">
+                <div class="info-icon" aria-hidden="true">ℹ️</div>
+                <div>
+                  <div class="info-title">About This Condition</div>
+                  <div class="info-text" id="info-description"></div>
+                </div>
+              </div>
+              <div class="info-item recommendation">
+                <div class="info-icon" aria-hidden="true">💊</div>
+                <div>
+                  <div class="info-title">Recommendation</div>
+                  <div class="info-text" id="info-recommendation"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="disclaimer" role="note">
+              <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+              </svg>
+              <span>For informational purposes only. Not a substitute for professional medical diagnosis.</span>
+            </div>
+
+            <button type="button" id="reset-btn" class="reset-btn" aria-label="Reset and analyze another scan">
+              Analyze Another Scan
+            </button>
+          </div>
+
+          <!-- Error State -->
+          <div class="result-error" id="result-error" hidden>
+            <div class="error-icon" aria-hidden="true">⚠️</div>
+            <h3>Analysis Failed</h3>
+            <p id="error-message">An unexpected error occurred.</p>
+            <button type="button" id="retry-btn" class="reset-btn" aria-label="Retry analysis">Retry</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Tumor Classes Section ── -->
+  <section class="classes-section" id="classes-section" aria-labelledby="classes-heading">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title" id="classes-heading">Detectable Tumor Types</h2>
+        <p class="section-subtitle">Our model is trained to classify MRI scans into the following categories</p>
+      </div>
+      <div class="classes-grid" role="list" aria-label="Tumor types">
+        <article class="class-card" role="listitem">
+          <div class="class-badge glioma" aria-label="Glioma severity: high risk">🔴</div>
+          <h3>Glioma</h3>
+          <div class="class-severity high">High Risk</div>
+          <p>Originates from glial cells. The most common malignant primary brain tumor, representing ~33% of all brain tumors.</p>
+          <div class="class-meta">
+            <span>Most Common</span>
+            <span>Variable Grade</span>
+          </div>
+        </article>
+        <article class="class-card" role="listitem">
+          <div class="class-badge meningioma" aria-label="Meningioma severity: medium risk">🟠</div>
+          <h3>Meningioma</h3>
+          <div class="class-severity medium">Medium Risk</div>
+          <p>Arises from the meninges. Typically benign and slow-growing, though location can make treatment challenging.</p>
+          <div class="class-meta">
+            <span>Usually Benign</span>
+            <span>Slow Growing</span>
+          </div>
+        </article>
+        <article class="class-card" role="listitem">
+          <div class="class-badge pituitary" aria-label="Pituitary tumor severity: medium risk">🟣</div>
+          <h3>Pituitary Tumor</h3>
+          <div class="class-severity medium">Medium Risk</div>
+          <p>Forms in the pituitary gland at the base of the brain. Can disrupt hormone regulation throughout the body.</p>
+          <div class="class-meta">
+            <span>Hormone Impact</span>
+            <span>Often Treatable</span>
+          </div>
+        </article>
+        <article class="class-card no-tumor-card" role="listitem">
+          <div class="class-badge no-tumor" aria-label="No tumor detected">🟢</div>
+          <h3>No Tumor</h3>
+          <div class="class-severity none">Healthy</div>
+          <p>No pathological tumor growth detected in the scan. The MRI appears within normal neurological parameters.</p>
+          <div class="class-meta">
+            <span>Normal Scan</span>
+            <span>Recommended Checkups</span>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── About Section ── -->
+  <section class="about-section" id="about-section" aria-labelledby="about-heading">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-text">
+          <div class="section-header" style="text-align:left; margin-bottom:1.5rem;">
+            <h2 class="section-title" id="about-heading">How It Works</h2>
+          </div>
+          <div class="about-steps" role="list" aria-label="How the analysis works">
+            <div class="step" role="listitem">
+              <div class="step-num" aria-hidden="true">01</div>
+              <div>
+                <h3>Upload MRI Scan</h3>
+                <p>Drop your brain MRI image in JPG, PNG, or similar format. The model accepts standard medical imaging exports.</p>
+              </div>
+            </div>
+            <div class="step" role="listitem">
+              <div class="step-num" aria-hidden="true">02</div>
+              <div>
+                <h3>CNN Processing</h3>
+                <p>The image is resized to 128×128px, normalized, and passed through a 4-layer convolutional neural network trained on thousands of MRI scans.</p>
+              </div>
+            </div>
+            <div class="step" role="listitem">
+              <div class="step-num" aria-hidden="true">03</div>
+              <div>
+                <h3>Classification Results</h3>
+                <p>Softmax probabilities are computed for all 4 classes. The highest-probability class is returned with confidence scores and clinical context.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="about-tech" aria-label="Technology stack">
+          <h3>Technology Stack</h3>
+          <div class="tech-grid" role="list" aria-label="Technologies used">
+            <div class="tech-item" role="listitem">
+              <span class="tech-icon" aria-hidden="true">🧠</span>
+              <span class="tech-name">TensorFlow / Keras</span>
+              <span class="tech-desc">CNN Model</span>
+            </div>
+            <div class="tech-item" role="listitem">
+              <span class="tech-icon" aria-hidden="true">🐍</span>
+              <span class="tech-name">Python / Flask</span>
+              <span class="tech-desc">Backend API</span>
+            </div>
+            <div class="tech-item" role="listitem">
+              <span class="tech-icon" aria-hidden="true">🖼️</span>
+              <span class="tech-name">OpenCV</span>
+              <span class="tech-desc">Image Processing</span>
+            </div>
+            <div class="tech-item" role="listitem">
+              <span class="tech-icon" aria-hidden="true">🔢</span>
+              <span class="tech-name">NumPy</span>
+              <span class="tech-desc">Array Operations</span>
+            </div>
+            <div class="tech-item" role="listitem">
+              <span class="tech-icon" aria-hidden="true">☁️</span>
+              <span class="tech-name">Render</span>
+              <span class="tech-desc">Cloud Deployment</span>
+            </div>
+            <div class="tech-item" role="listitem">
+              <span class="tech-icon" aria-hidden="true">📊</span>
+              <span class="tech-name">Kaggle Dataset</span>
+              <span class="tech-desc">Training Data</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Footer ── -->
+  <footer class="footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-logo">
+        <span class="logo-name">NeuroScan</span>
+        <span class="logo-badge">AI</span>
+      </div>
+      <p class="footer-disclaimer">
+        ⚠️ This tool is for <strong>research and educational purposes only</strong>. 
+        Results should not replace professional medical advice, diagnosis, or treatment.
+      </p>
+      <p class="footer-copy">Built with TensorFlow · Deployed on Render · &copy; 2025 NeuroScan AI</p>
+    </div>
+  </footer>
+
+  <script src="/static/js/main.js"></script>
+</body>
+</html>
